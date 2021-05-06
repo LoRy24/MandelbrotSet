@@ -1,22 +1,36 @@
 package me.lory24;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class MandelbrotSet extends JComponent {
 
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 800;
-    public static final int ITERATIONS = 75;
+    public static final int WIDTH = 30000;
+    public static final int HEIGHT = 30000;
+    public static final int ITERATIONS = 1050;
     private final BufferedImage buffer;
 
-    public MandelbrotSet() {
-        buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB); render();
-        JFrame frame = new JFrame("Mandelbrot Set");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(true); frame.getContentPane().add(this);
-        frame.pack(); frame.setVisible(true);
+    public MandelbrotSet() throws IOException {
+        System.out.println("Generating...");
+        buffer = new BufferedImage(WIDTH,
+                HEIGHT, BufferedImage.TYPE_INT_RGB);
+        render();
+
+        System.out.println("Generated! Saving in file...");
+        File file = new File("D:\\FilesVari\\mandelbrot.jpg");
+        ImageIO.write(buffer, "jpg", file);
+        System.out.println("Saved!");
+
+//        JFrame frame = new JFrame("Mandelbrot Set");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setResizable(true);
+//        frame.getContentPane().add(this);
+//        frame.pack();
+//        frame.setVisible(true);
     }
 
     @Override
@@ -43,11 +57,11 @@ public class MandelbrotSet extends JComponent {
             if (z.abs() > 2.0) break;
         }
         if (i == ITERATIONS) return 0;
-        //return Color.HSBtoRGB(((float) i / ITERATIONS + 0f)%1, 0.5f, 1);
-        return i | (i << 18);
+        return Color.HSBtoRGB(((float) i / ITERATIONS + 0f)%1, 0.5f, 1);
+        //return i | (i << 18);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new MandelbrotSet();
     }
 }
